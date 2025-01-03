@@ -70,8 +70,8 @@ def start_system_monitor():
 if __name__ == "__main__":
     # Replace with your Instagram credentials
     IG_USERNAME = "funwithnikhi72"
-    IG_PASSWORD = "wecanshape@98"
-    TARGET_USERNAME = "readers.wave"  # Replace with the username whose posts you want to like
+    IG_PASSWORD = "wecanshape@22"
+    TARGET_USERNAME = "crispexo"  # Replace with the username whose posts you want to like
 
     # Start monitoring system usage
     start_system_monitor()
