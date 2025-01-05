@@ -8,7 +8,7 @@ import random
 # Constants
 COOKIES_PATH = 'insta_cookies.pkl'
 HASHTAGS = [
-    "books","book","quote","lesson","student"
+    "books", "book", "quote", "lesson", "student"
 ]
 
 COMMENTS = [
@@ -55,11 +55,22 @@ def start_system_monitor():
 def view_post():
     time.sleep(random.uniform(2, 5))  # Simulate viewing time
 
+def get_hashtag_posts(client, hashtag, amount):
+    # Randomly choose between top and recent posts
+    if random.random() < 0.5:
+        posts = client.hashtag_medias_top(hashtag, amount=amount)
+        post_type = "top"
+    else:
+        posts = client.hashtag_medias_recent(hashtag, amount=amount)
+        post_type = "recent"
+    return posts, post_type
+
 def engage_with_hashtag(client, hashtag, post_count):
     try:
         print(f"\nFetching posts for #{hashtag}")
-        medias = client.hashtag_medias_top(hashtag, amount=25)  # Fetch fewer posts
-        print(f"Fetched {len(medias)} posts for #{hashtag}")
+        # Fetch more posts than needed to have a good selection pool
+        medias, post_type = get_hashtag_posts(client, hashtag, amount=25)
+        print(f"Fetched {len(medias)} {post_type} posts for #{hashtag}")
 
         if not medias:
             print(f"No posts found for #{hashtag}")
@@ -78,15 +89,15 @@ def engage_with_hashtag(client, hashtag, post_count):
                 action_choice = random.random()
                 if action_choice < 0.7:  # 70% chance to like
                     client.media_like(post.id)
-                    print(f"Liked post from #{hashtag}")
+                    print(f"Liked {post_type} post from #{hashtag}")
                     engagement_count += 1
                 elif action_choice < 0.9:  # 20% chance to comment
                     comment = random.choice(COMMENTS)
                     client.media_comment(post.id, comment)
-                    print(f"Commented: {comment}")
+                    print(f"Commented on {post_type} post: {comment}")
                     engagement_count += 1
                 else:
-                    print(f"Skipped post (ID: {post.id}) without engagement.")
+                    print(f"Skipped {post_type} post (ID: {post.id}) without engagement.")
 
             except Exception as e:
                 print(f"Error engaging with post (ID: {post.id}): {e}")
